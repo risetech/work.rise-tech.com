@@ -1,0 +1,221 @@
+﻿@{
+	ViewBag.Title = "GoogleAnalytics";
+}
+<h2>Google Analytics</h2>
+<script src="@Url.Content("~/Scripts/highcharts.js")" type="text/javascript"></script>
+<table class="tablesorter" id="linksContainer" style="display: none">
+	<thead>
+		<tr id="header-tr">
+			<th>Site
+			</th>
+			<th>Max
+			</th>
+			<th>Local Max
+			</th>
+			<th>Last week
+			</th>
+			<th>Current week
+			</th>
+		</tr>
+	</thead>
+	<tbody>
+	</tbody>
+</table>
+<div style="text-align: center; margin-top: 200px" id="containerImage">
+	<img style="width:40px;height:40px;" id=progress src="@Url.Content("~/Content/images/progressbar.gif")"/>
+</div>
+<div class="datapicker-div">
+	Показать с:&nbsp;<input id="datepicker" name="Date" type="text">
+</div>
+<div id="chartContainerProjectGroups">
+</div>
+<div class="datapicker-div">
+	Показать с:&nbsp;<input id="datepicker2" name="Date" type="text">
+</div>
+<div id="chartContainerProgects">
+</div>
+<br />
+<br />
+<br />
+<br />
+<script type="text/javascript">
+	var data = {}
+	$(function () {
+
+		$.ajax(
+				{
+					url: '/GoogleAnalytics/GetVisitors'
+				}).success(onLoadData);
+	});
+	function onLoadData(d) {
+		dateFiltersInit();
+		data = JSON.parse(d);
+		for (var item in data.Projects) {
+			$('#linksContainer tbody').append($('<tr class="data-tr" id=' + getNormalId(item) + '><td ><a target="_blank" href=http://' + item + '>' + item + '</a></td></tr>'));
+		}
+		for (var item in data.ProjectGroups) {
+			$('#linksContainer tbody').append($('<tr class="data-tr" id=' + getNormalId(item) + '><td ><a target="_blank" href=http://' + item + '>' + item + '</a></td></tr>'));
+			break;
+		}
+		visualise(data.Projects, 'chartContainerProgects', localStorage.getItem('date'), true);
+		visualise(data.ProjectGroups, 'chartContainerProjectGroups', localStorage.getItem('date-sum'), true);
+		$('#linksContainer').tablesorter({ widthFixed: true, widgets: ['zebra'], sortList: [[1, 1]] });
+		$('#linksContainer').toggle();
+		$('#containerImage').toggle();
+	};
+	function dateFiltersInit() {
+		$('#datepicker').datepicker($.datepicker.regional['ru']);
+		$('#datepicker2').datepicker($.datepicker.regional['ru']);
+		if (localStorage.getItem('date-sum'))
+			$('#datepicker').val(localStorage.getItem('date-sum'));
+		if (localStorage.getItem('date'))
+			$('#datepicker2').val(localStorage.getItem('date'));
+		$('#datepicker').change(function () {
+			localStorage.setItem('date-sum', $('#datepicker').val());
+			visualise(data.ProjectGroups, 'chartContainerProjectGroups', localStorage.getItem('date-sum'), false);
+		});
+		$('#datepicker2').change(function () {
+			localStorage.setItem('date', $('#datepicker2').val());
+			visualise(data.Projects, 'chartContainerProgects', localStorage.getItem('date'), false);
+		});
+		$('.datapicker-div').toggle();
+	}
+	function getAttributeByIndex(obj, index) {
+		var i = 0;
+		for (var attr in obj) {
+			if (index === i) {
+				return obj[attr];
+			}
+			i++;
+		}
+		return null;
+	};
+	function getNormalId(id) {
+		var expr = new RegExp('[\\.\\s]', 'ig')
+		return id.replace(expr, '-');
+	}
+	function getMax(mass) {
+		var result = 0;
+		for (var i = 0; i < mass.length; i++)
+			if (mass[i] > result)
+				result = mass[i];
+		return result;
+	}
+	function getLocalMax(max, mass) {
+		var local = 0;
+		for (var i = 1; i < mass.length - 1; i++)
+			if (mass[i] > local && mass[i - 1] < mass[i] && mass[i + 1] < mass[i] && mass[i] != max)
+				local = mass[i];
+		return local;
+	};
+	function getLast(ind, mass) {
+		if (mass.length > ind + 1)
+			return mass[mass.length - ind - 1];
+		return 0;
+	}
+	function calcStat(id, data) {
+		var tr = $('#' + getNormalId(id));
+		var max = getMax(data)
+		tr.append('<td>' + max + '</td>');
+		tr.append('<td>' + getLocalMax(max, data) + '</td>');
+		tr.append('<td>' + getLast(1, data) + '</td>');
+		tr.append('<td>' + getLast(0, data) + '</td>');
+
+	};
+	function visualise(data, nameContainer, startDate, calc) {
+		var s = [];
+		var dates = {};
+		dates.categories = [];
+		var start = undefined;
+		if (startDate)
+			start = $.datepicker.parseDate("dd.mm.yy", startDate);
+		$('#' + nameContainer).empty();
+		for (var date in getAttributeByIndex(data, 0)) {
+			var temp = date.replace(' 00:00:00', '');
+			if (!start || new Date(temp) >= start)
+				dates.categories.push(temp);
+		}
+		dates.categories.reverse();
+
+		for (var item in data) {
+			var dataCount = []
+
+			for (var itemCount in data[item]) {
+				var temp = itemCount.replace(' 00:00:00', '');
+				if (!start || new Date(temp) >= start)
+					dataCount.push(data[item][itemCount]);
+			}
+			dataCount.reverse();
+			if (calc)
+				calcStat(item, dataCount);
+			s.push({
+				name: item,
+				data: dataCount
+			});
+		}
+		chart = new Highcharts.Chart({
+			chart: {
+				renderTo: nameContainer,
+				marginRight: 130,
+				marginBottom: 25,
+				type: 'spline'
+			},
+			title: {
+				text: 'Количество посетителей по неделям',
+				x: 0
+			},
+			subtitle: {
+				text: 'Source: GoogleAnalytics.com',
+				x: 0
+			},
+			xAxis: dates,
+			yAxis: {
+				title: {
+					text: 'Число посещений'
+				},
+				min: 0,
+				minorGridLineWidth: 0,
+				gridLineWidth: 0,
+				alternateGridColor: null,
+			},
+			tooltip: {
+				formatter: function () {
+					return '<b>' + this.series.name + '</b><br/>' +
+                        this.x + ': ' + this.y;
+				}
+			},
+			legend: {
+				layout: 'vertical',
+				align: 'right',
+				verticalAlign: 'top',
+				x: -10,
+				y: 100,
+				borderWidth: 0
+			},
+			series: s,
+			plotOptions: {
+				spline: {
+					lineWidth: 4,
+					states: {
+						hover: {
+							lineWidth: 5
+						}
+					},
+					marker: {
+						enabled: false,
+						states: {
+							hover: {
+								enabled: true,
+								symbol: 'circle',
+								radius: 5,
+								lineWidth: 1
+							}
+						}
+					}
+				}
+			}
+		});
+	};
+
+
+</script>

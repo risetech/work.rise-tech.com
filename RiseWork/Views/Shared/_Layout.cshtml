@@ -1,0 +1,53 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+	<title>@ViewBag.Title</title>
+	<script src="@Url.Content("~/Scripts/jquery-1.7.1.min.js")" type="text/javascript"></script>
+	<script src="@Url.Content("~/Scripts/jquery-ui-1.8.20.min.js")" type="text/javascript"></script>
+	<script src="@Url.Content("~/Scripts/bootstrap.min.js")" type="text/javascript"></script>	
+	<script src="@Url.Content("~/Scripts/jQueryDatepickerRu.js")" type="text/javascript"></script>
+	<script src="@Url.Content("~/Scripts/jquery.tablesorter.min.js")" type="text/javascript"></script>
+	<script src="@Url.Content("~/Scripts/jquery.tablesorter.pager.js")" type="text/javascript"></script>
+	<link href="@Url.Content("~/Content/bootstrap-responsive.min.css")" rel="stylesheet" type="text/css" />
+	<link href="@Url.Content("~/Content/bootstrap.min.css")" rel="stylesheet" type="text/css" />
+	<link href="@Url.Content("~/Content/themes/base/jquery-ui.css")" rel="stylesheet" type="text/css" />
+	<link href="@Url.Content("~/Content/Site.css")" rel="stylesheet" type="text/css" />
+	<link href="@Url.Content("~/Content/tablesorter/style.css")" rel="stylesheet" type="text/css" />
+	<link href="@Url.Content("~/Content/tablesorter/jquery.tablesorter.pager.css")" rel="stylesheet" type="text/css" />
+</head>
+<body>
+	<div class="page">
+		<div class="navbar navbar-fixed-top">
+			<div class="navbar-inner">
+				<div class="container">
+					<a class="brand" href="#">Rise-work</a>
+					<div class="nav-collapse">
+						<ul class="nav">
+							<li data-name="Home"><a href="@Url.Action("Index", "Home")">Главная</a></li>
+							<li data-name="Projects"><a href="@Url.Action("Index", "Projects")">Проекты</a></li>
+							<li data-name="GoogleAnalytics"><a href="@Url.Action("Index", "GoogleAnalytics")">GoogleAnalytics</a></li>
+						</ul>
+					</div>
+					@Html.Partial("_LogOnPartial")
+					<!--/.nav-collapse -->
+				</div>
+			</div>
+		</div>
+		<div class="clear">
+		</div>
+		<div class="container">
+			@RenderBody()
+		</div>
+		<div id="footer">
+		</div>
+	</div>
+	<script>
+		$(function () {
+			var str = location.pathname.split("/")[1];
+			if (str == "")
+				str = "Home";
+			$('li[data-name=' + str + ']').addClass('active');
+		});
+	</script>
+</body>
+</html>

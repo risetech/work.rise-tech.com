@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="2.0" xmlns:edmx="http://schemas.microsoft.com/ado/2008/10/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2008/10/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="4ef16fa0a1ba4fad8491bc2f36f67026" Name="Diagram1">
+        <EntityTypeShape EntityType="RiseWorkModel.Analytics" Width="1.5" PointX="5" PointY="4.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="RiseWorkModel.Projects" Width="1.5" PointX="0.75" PointY="1.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="RiseWorkModel.Sites" Width="1.5" PointX="2.75" PointY="5.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="RiseWorkModel.User" Width="1.5" PointX="0.75" PointY="5.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="RiseWorkModel.UserProjectsM2M" Width="1.5" PointX="3" PointY="1" IsExpanded="true" />
+        <AssociationConnector Association="RiseWorkModel.FK_Analytics_Sites" ManuallyRouted="false" />
+        <AssociationConnector Association="RiseWorkModel.FK_UserProjectsM2M_Projects" ManuallyRouted="false" />
+        <AssociationConnector Association="RiseWorkModel.FK_UserProjectsM2M_User" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

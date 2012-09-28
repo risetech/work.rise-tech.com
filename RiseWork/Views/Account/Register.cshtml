@@ -1,0 +1,45 @@
+﻿@model RiseWork.Models.RegisterModel
+@{
+	ViewBag.Title = "Register";
+}
+<h2>
+	Новый аккаунт</h2>
+<script src="@Url.Content("~/Scripts/jquery.validate.min.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.min.js")" type="text/javascript"></script>
+@using (Html.BeginForm(null, null, FormMethod.Post, new { @class = "form-horizontal" }))
+{
+	@Html.ValidationSummary(true, "Account creation was unsuccessful. Please correct the errors and try again.")
+	<div>
+		<fieldset>
+			<div class="control-group">
+				<label class="control-label">
+					Логин</label>
+				<div class="controls">
+					@Html.TextBoxFor(m => m.UserName)
+					@Html.ValidationMessageFor(m => m.UserName)
+				</div>
+			</div>
+			<div class="control-group">
+				<label class="control-label">
+					Пароль</label>
+				<div class="controls">
+					@Html.PasswordFor(m => m.Password)
+					@Html.ValidationMessageFor(m => m.Password)
+				</div>
+			</div>
+			<div class="control-group">
+				<label class="control-label">
+					Повтор пароля</label>
+				<div class="controls">
+					@Html.PasswordFor(m => m.ConfirmPassword)
+					@Html.ValidationMessageFor(m => m.ConfirmPassword)
+				</div>
+			</div>
+			<div class="form-actions">
+				<button type="submit" class="btn btn-primary">
+					Сохранить аккаунт</button>&nbsp;&nbsp;
+				@Html.ActionLink("Отмена", "Index", "Home")
+			</div>
+		</fieldset>
+	</div>
+}

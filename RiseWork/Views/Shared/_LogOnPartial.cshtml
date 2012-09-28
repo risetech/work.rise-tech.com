@@ -1,0 +1,19 @@
+﻿@if (Request.IsAuthenticated)
+{
+	<div class="btn-group pull-right">
+		<div style="margin-top:5px">@(User.Identity.Name.Split('\\')[1])</div>
+		@*<a href="#"><i class="icon-user">
+		</i>*@ @*<span class="caret"></span></a>*@
+@*		<ul class="dropdown-menu">
+			<li><a href="#">Мой профиль</a></li>
+			<li class="divider"></li>
+			<li>@Html.ActionLink("Выйти", "LogOff", "Account")</li>
+		</ul>*@
+	</div>
+}
+else
+{
+	<div class="btn-group pull-right">
+		@Html.ActionLink("Вход", "LogOn", "Account", null, new { @class = "btn" })
+	</div>
+}

@@ -1,0 +1,111 @@
+﻿@model List<RiseWork.Models.Projects>
+@{
+	ViewBag.Title = "Index";
+}
+<h2 style="display: inline-block">Проекты</h2>
+<a style="float:right" href="@Url.Action("Create")" class="btn btn-primary">Добавить</a>
+<br />
+<table class="table">
+	<tr>
+		<th>#
+		</th>
+		<th>Название
+		</th>
+		<th>Статус
+		</th>
+		<th>Комментарий
+		</th>
+		@*		<th>
+		</th>*@
+		<th></th>
+	</tr>
+	@for (int i = 0; i < Model.Count(); i++)
+ {
+		<tr>
+			<td>@(i + 1)
+			</td>
+			<td>@(Model[i].Project_name)
+			</td>
+			<td>@(Model[i].Project_open ? "Открыт" : "Закрыт")
+			</td>
+			<td>@(Model[i].Project_comment)
+			</td>
+			@*			<td>
+				@Html.ActionLink("Редактировать", "Edit", new { id = Model[i].Project_id })
+			</td>*@
+			<td>
+				<a class="check-href" data-project="@Model[i].Project_name" data-toggle="modal" href="#myModal" data-id="@Model[i].Project_id">Отметиться</a>
+			</td>
+		</tr>
+ }
+</table>
+<div class="modal" id="myModal" style="display: none">
+	<div class="modal-header">
+		<button class="close" data-dismiss="modal">
+			×</button>
+		<h3></h3>
+	</div>
+	<div class="modal-body">
+		<div class="form-horizontal">
+			<div class="control-group">
+				<label class="control-label">
+					Количество часов</label>
+				<div class="controls">
+					<input name="Hours" type="text" value="8">
+				</div>
+			</div>
+			<div class="control-group">
+				<label class="control-label">
+					Дата</label>
+				<div class="controls">
+					<input id="datepicker" name="Date" type="text">
+				</div>
+			</div>
+			<div class="control-group">
+				<label class="control-label">
+					Комментарий</label>
+				<div class="controls">
+					<textarea cols="20" name="Comment" rows="2"></textarea>
+				</div>
+			</div>
+			<input type="hidden" name="ProjectID" />
+		</div>
+	</div>
+	<div class="modal-footer">
+		<a data-dismiss="modal" href="#" class="btn">Закрыть</a> <a href="#" class="btn btn-primary save-check">Сохранить</a>
+	</div>
+</div>
+<script>
+	$(function () {
+		$('#datepicker').datepicker($.datepicker.regional['ru']);
+		var date = new Date();
+		$('#datepicker').val(date.getDate() + "." + (date.getMonth() + 1) + "." + date.getFullYear());
+
+		$('.check-href').click(function () {
+			var item = $(this);
+			var caption = item.attr('data-project');
+			var id = item.attr('data-id');
+			$('input[name=ProjectID]').val(id);
+			$('.modal .modal-header h3').text("Проект «" + caption + "»");
+			$('.modal textarea[name=Comment]').val("");			
+		});
+
+		$('.save-check').click(function () {
+			var obj = {
+				ProjectId: $('.modal input[name=ProjectID]').val(),
+				Hours: $('.modal input[name=Hours]').val() || 0,
+				Date: $('.modal input[name=Date]').val() || new Date(),
+				Comment: $('.modal textarea[name=Comment]').val()
+			};
+			$.ajax({
+				url: '/Projects/CheckIn',
+				contentType: 'application/json',
+				type: 'POST',
+				data: JSON.stringify(obj),
+				success: function (data) {
+					$('#myModal').modal('hide');
+				}
+			});
+		});
+	});
+</script>

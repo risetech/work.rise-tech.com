@@ -1,0 +1,291 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="2.0" xmlns:edmx="http://schemas.microsoft.com/ado/2008/10/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="RiseWorkModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
+        <EntityContainer Name="RiseWorkModelStoreContainer">
+          <EntitySet Name="Analytics" EntityType="RiseWorkModel.Store.Analytics" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="Projects" EntityType="RiseWorkModel.Store.Projects" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="Sites" EntityType="RiseWorkModel.Store.Sites" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="User" EntityType="RiseWorkModel.Store.User" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="UserProjectsM2M" EntityType="RiseWorkModel.Store.UserProjectsM2M" store:Type="Tables" Schema="dbo" />
+          <AssociationSet Name="FK_Analytics_Sites" Association="RiseWorkModel.Store.FK_Analytics_Sites">
+            <End Role="Sites" EntitySet="Sites" />
+            <End Role="Analytics" EntitySet="Analytics" />
+          </AssociationSet>
+          <AssociationSet Name="FK_UserProjectsM2M_Projects" Association="RiseWorkModel.Store.FK_UserProjectsM2M_Projects">
+            <End Role="Projects" EntitySet="Projects" />
+            <End Role="UserProjectsM2M" EntitySet="UserProjectsM2M" />
+          </AssociationSet>
+          <AssociationSet Name="FK_UserProjectsM2M_User" Association="RiseWorkModel.Store.FK_UserProjectsM2M_User">
+            <End Role="User" EntitySet="User" />
+            <End Role="UserProjectsM2M" EntitySet="UserProjectsM2M" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="Analytics">
+          <Key>
+            <PropertyRef Name="Analytics_id" />
+          </Key>
+          <Property Name="Analytics_id" Type="bigint" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="Analytics_date" Type="datetime" Nullable="false" />
+          <Property Name="Sites_id" Type="bigint" Nullable="false" />
+          <Property Name="Analytics_value" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Projects">
+          <Key>
+            <PropertyRef Name="Project_id" />
+          </Key>
+          <Property Name="Project_id" Type="bigint" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="Project_name" Type="varchar(max)" Nullable="false" />
+          <Property Name="Project_comment" Type="varchar(max)" />
+          <Property Name="Project_open" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Sites">
+          <Key>
+            <PropertyRef Name="Site_id" />
+          </Key>
+          <Property Name="Site_id" Type="bigint" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="Site_name" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="User_id" />
+          </Key>
+          <Property Name="User_id" Type="bigint" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="User_name" Type="varchar(max)" Nullable="false" />
+        </EntityType>
+        <EntityType Name="UserProjectsM2M">
+          <Key>
+            <PropertyRef Name="UserProjectsM2M_id" />
+          </Key>
+          <Property Name="UserProjectsM2M_id" Type="bigint" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="UserProjectsM2M_date" Type="datetime" />
+          <Property Name="UserProjectsM2M_hours" Type="bigint" />
+          <Property Name="User_id" Type="bigint" />
+          <Property Name="Projects_id" Type="bigint" />
+          <Property Name="UserProjectsM2M_comment" Type="varchar(max)" />
+        </EntityType>
+        <Association Name="FK_Analytics_Sites">
+          <End Role="Sites" Type="RiseWorkModel.Store.Sites" Multiplicity="1" />
+          <End Role="Analytics" Type="RiseWorkModel.Store.Analytics" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Sites">
+              <PropertyRef Name="Site_id" />
+            </Principal>
+            <Dependent Role="Analytics">
+              <PropertyRef Name="Sites_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_UserProjectsM2M_Projects">
+          <End Role="Projects" Type="RiseWorkModel.Store.Projects" Multiplicity="0..1" />
+          <End Role="UserProjectsM2M" Type="RiseWorkModel.Store.UserProjectsM2M" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Projects">
+              <PropertyRef Name="Project_id" />
+            </Principal>
+            <Dependent Role="UserProjectsM2M">
+              <PropertyRef Name="Projects_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_UserProjectsM2M_User">
+          <End Role="User" Type="RiseWorkModel.Store.User" Multiplicity="0..1" />
+          <End Role="UserProjectsM2M" Type="RiseWorkModel.Store.UserProjectsM2M" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="User_id" />
+            </Principal>
+            <Dependent Role="UserProjectsM2M">
+              <PropertyRef Name="User_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="RiseWorkModel" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
+        <EntityContainer Name="RiseWorkEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Analytics" EntityType="RiseWorkModel.Analytics" />
+          <EntitySet Name="Projects" EntityType="RiseWorkModel.Projects" />
+          <EntitySet Name="Sites" EntityType="RiseWorkModel.Sites" />
+          <EntitySet Name="User" EntityType="RiseWorkModel.User" />
+          <EntitySet Name="UserProjectsM2M" EntityType="RiseWorkModel.UserProjectsM2M" />
+          <AssociationSet Name="FK_Analytics_Sites" Association="RiseWorkModel.FK_Analytics_Sites">
+            <End Role="Sites" EntitySet="Sites" />
+            <End Role="Analytics" EntitySet="Analytics" />
+          </AssociationSet>
+          <AssociationSet Name="FK_UserProjectsM2M_Projects" Association="RiseWorkModel.FK_UserProjectsM2M_Projects">
+            <End Role="Projects" EntitySet="Projects" />
+            <End Role="UserProjectsM2M" EntitySet="UserProjectsM2M" />
+          </AssociationSet>
+          <AssociationSet Name="FK_UserProjectsM2M_User" Association="RiseWorkModel.FK_UserProjectsM2M_User">
+            <End Role="User" EntitySet="User" />
+            <End Role="UserProjectsM2M" EntitySet="UserProjectsM2M" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="Analytics">
+          <Key>
+            <PropertyRef Name="Analytics_id" />
+          </Key>
+          <Property Name="Analytics_id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Analytics_date" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Sites_id" Type="Int64" Nullable="false" />
+          <Property Name="Analytics_value" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Sites" Relationship="RiseWorkModel.FK_Analytics_Sites" FromRole="Analytics" ToRole="Sites" />
+        </EntityType>
+        <EntityType Name="Projects">
+          <Key>
+            <PropertyRef Name="Project_id" />
+          </Key>
+          <Property Name="Project_id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Project_name" Type="String" Nullable="false" MaxLength="Max" Unicode="false" FixedLength="false" />
+          <Property Name="Project_comment" Type="String" MaxLength="Max" Unicode="false" FixedLength="false" />
+          <Property Name="Project_open" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="UserProjectsM2M" Relationship="RiseWorkModel.FK_UserProjectsM2M_Projects" FromRole="Projects" ToRole="UserProjectsM2M" />
+        </EntityType>
+        <EntityType Name="Sites">
+          <Key>
+            <PropertyRef Name="Site_id" />
+          </Key>
+          <Property Name="Site_id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Site_name" Type="String" MaxLength="50" Unicode="true" FixedLength="false" />
+          <NavigationProperty Name="Analytics" Relationship="RiseWorkModel.FK_Analytics_Sites" FromRole="Sites" ToRole="Analytics" />
+        </EntityType>
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="User_id" />
+          </Key>
+          <Property Name="User_id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="User_name" Type="String" Nullable="false" MaxLength="Max" Unicode="false" FixedLength="false" />
+          <NavigationProperty Name="UserProjectsM2M" Relationship="RiseWorkModel.FK_UserProjectsM2M_User" FromRole="User" ToRole="UserProjectsM2M" />
+        </EntityType>
+        <EntityType Name="UserProjectsM2M">
+          <Key>
+            <PropertyRef Name="UserProjectsM2M_id" />
+          </Key>
+          <Property Name="UserProjectsM2M_id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserProjectsM2M_date" Type="DateTime" Precision="3" />
+          <Property Name="UserProjectsM2M_hours" Type="Int64" />
+          <Property Name="User_id" Type="Int64" />
+          <Property Name="Projects_id" Type="Int64" />
+          <Property Name="UserProjectsM2M_comment" Type="String" MaxLength="Max" Unicode="false" FixedLength="false" />
+          <NavigationProperty Name="Projects" Relationship="RiseWorkModel.FK_UserProjectsM2M_Projects" FromRole="UserProjectsM2M" ToRole="Projects" />
+          <NavigationProperty Name="User" Relationship="RiseWorkModel.FK_UserProjectsM2M_User" FromRole="UserProjectsM2M" ToRole="User" />
+        </EntityType>
+        <Association Name="FK_Analytics_Sites">
+          <End Role="Sites" Type="RiseWorkModel.Sites" Multiplicity="1" />
+          <End Role="Analytics" Type="RiseWorkModel.Analytics" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Sites">
+              <PropertyRef Name="Site_id" />
+            </Principal>
+            <Dependent Role="Analytics">
+              <PropertyRef Name="Sites_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_UserProjectsM2M_Projects">
+          <End Role="Projects" Type="RiseWorkModel.Projects" Multiplicity="0..1" />
+          <End Role="UserProjectsM2M" Type="RiseWorkModel.UserProjectsM2M" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Projects">
+              <PropertyRef Name="Project_id" />
+            </Principal>
+            <Dependent Role="UserProjectsM2M">
+              <PropertyRef Name="Projects_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_UserProjectsM2M_User">
+          <End Role="User" Type="RiseWorkModel.User" Multiplicity="0..1" />
+          <End Role="UserProjectsM2M" Type="RiseWorkModel.UserProjectsM2M" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="User_id" />
+            </Principal>
+            <Dependent Role="UserProjectsM2M">
+              <PropertyRef Name="User_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2008/09/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="RiseWorkModelStoreContainer" CdmEntityContainer="RiseWorkEntities">
+          <EntitySetMapping Name="Analytics">
+            <EntityTypeMapping TypeName="RiseWorkModel.Analytics">
+              <MappingFragment StoreEntitySet="Analytics">
+                <ScalarProperty Name="Analytics_id" ColumnName="Analytics_id" />
+                <ScalarProperty Name="Analytics_date" ColumnName="Analytics_date" />
+                <ScalarProperty Name="Sites_id" ColumnName="Sites_id" />
+                <ScalarProperty Name="Analytics_value" ColumnName="Analytics_value" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Projects">
+            <EntityTypeMapping TypeName="RiseWorkModel.Projects">
+              <MappingFragment StoreEntitySet="Projects">
+                <ScalarProperty Name="Project_id" ColumnName="Project_id" />
+                <ScalarProperty Name="Project_name" ColumnName="Project_name" />
+                <ScalarProperty Name="Project_comment" ColumnName="Project_comment" />
+                <ScalarProperty Name="Project_open" ColumnName="Project_open" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Sites">
+            <EntityTypeMapping TypeName="RiseWorkModel.Sites">
+              <MappingFragment StoreEntitySet="Sites">
+                <ScalarProperty Name="Site_id" ColumnName="Site_id" />
+                <ScalarProperty Name="Site_name" ColumnName="Site_name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="User">
+            <EntityTypeMapping TypeName="RiseWorkModel.User">
+              <MappingFragment StoreEntitySet="User">
+                <ScalarProperty Name="User_id" ColumnName="User_id" />
+                <ScalarProperty Name="User_name" ColumnName="User_name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="UserProjectsM2M">
+            <EntityTypeMapping TypeName="RiseWorkModel.UserProjectsM2M">
+              <MappingFragment StoreEntitySet="UserProjectsM2M">
+                <ScalarProperty Name="UserProjectsM2M_id" ColumnName="UserProjectsM2M_id" />
+                <ScalarProperty Name="UserProjectsM2M_date" ColumnName="UserProjectsM2M_date" />
+                <ScalarProperty Name="UserProjectsM2M_hours" ColumnName="UserProjectsM2M_hours" />
+                <ScalarProperty Name="User_id" ColumnName="User_id" />
+                <ScalarProperty Name="Projects_id" ColumnName="Projects_id" />
+                <ScalarProperty Name="UserProjectsM2M_comment" ColumnName="UserProjectsM2M_comment" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2008/10/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="False" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

@@ -1,0 +1,14 @@
+﻿body
+{
+	padding-top:60px;
+}
+.clear
+{
+	clear:both;
+}
+.datapicker-div
+{
+	display:none;
+	margin:5px;
+	vertical-align:central;
+}

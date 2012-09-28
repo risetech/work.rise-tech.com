@@ -1,0 +1,42 @@
+﻿@model RiseWork.Models.Projects
+@{
+	ViewBag.Title = "Редактирование проекта";
+}
+<h2>
+	Редактирование проекта «@Model.Project_name»</h2>
+<script src="@Url.Content("~/Scripts/jquery.validate.min.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.min.js")" type="text/javascript"></script>
+<br />
+@using (Html.BeginForm(null, null, FormMethod.Post, new { @class = "form-horizontal" }))
+{
+	@Html.ValidationSummary(true)
+	<fieldset>
+		@Html.HiddenFor(m=>m.Project_id)
+		<div class="control-group">
+			<label class="control-label">
+				Название проекта</label>
+			<div class="controls">
+				@Html.TextBoxFor(m => m.Project_name)
+			</div>
+		</div>
+		<div class="control-group">
+			<label class="control-label">
+				Комментарий</label>
+			<div class="controls">
+				@Html.TextAreaFor(m => m.Project_comment)
+			</div>
+		</div>
+		<div class="control-group">
+			<label class="control-label">
+				Проект открыт</label>
+			<div class="controls">
+				@Html.CheckBoxFor(m => m.Project_open, new { @checked = "checked" })
+			</div>
+		</div>
+		<div class="form-actions">
+			<button type="submit" class="btn btn-primary">
+				Сохранить</button>&nbsp;&nbsp;
+			@Html.ActionLink("Отмена", "Index", "Projects")
+		</div>
+	</fieldset>
+}

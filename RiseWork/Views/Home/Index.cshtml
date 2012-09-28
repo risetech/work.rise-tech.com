@@ -1,0 +1,67 @@
+﻿@model IQueryable<RiseWork.Models.UserProjectsM2M>
+@{
+	ViewBag.Title = "Home Page";
+}
+<h2>
+	Таблица работ</h2>
+<br />
+<table id="workTable" class="tablesorter">
+	<thead>
+		<tr>
+			<th>
+				Название проекта
+			</th>
+			<th>
+				Логин работника
+			</th>
+			<th>
+				Количество часов
+			</th>
+			<th>
+				Дата
+			</th>
+			<th>
+				Комментарий
+			</th>
+		</tr>
+	</thead>
+	<tbody>
+		@foreach (var item in Model)
+  {
+			<tr>
+				<td>@item.Projects.Project_name
+				</td>
+				<td>@item.User.User_name
+				</td>
+				<td>@item.UserProjectsM2M_hours
+				</td>
+				<td>@item.UserProjectsM2M_date
+				</td>
+				<td>
+					@item.UserProjectsM2M_comment
+				</td>
+			</tr>
+  }
+	</tbody>
+</table>
+<div id="pager" class="pager">
+	<form style="vertical-align: middle">
+	<img src="@Url.Content("~/Content/tablesorter/first.png")" class="first">
+	<img src="@Url.Content("~/Content/tablesorter/prev.png")" class="prev">
+	<input type="text" class="pagedisplay">
+	<img src="@Url.Content("~/Content/tablesorter/next.png")" class="next">
+	<img src="@Url.Content("~/Content/tablesorter/last.png")" class="last">
+	<select class="pagesize">
+		<option selected="selected" value="20">20</option>
+		<option value="40">40</option>
+		<option value="80">80</option>
+		<option value="100">100</option>
+	</select>
+	</form>
+</div>
+<script>
+	$(function () {
+		$('#workTable').tablesorter({ widthFixed: true, widgets: ['zebra'], sortList: [[0, 0]] })
+						.tablesorterPager({ container: $('#pager') });
+	});
+</script>

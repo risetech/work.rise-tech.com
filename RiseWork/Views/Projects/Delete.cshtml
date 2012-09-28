@@ -1,0 +1,33 @@
+﻿@model RiseWork.Models.Projects
+
+@{
+    ViewBag.Title = "Delete";
+}
+
+<h2>Delete</h2>
+
+<h3>Are you sure you want to delete this?</h3>
+<fieldset>
+    <legend>Projects</legend>
+
+    <div class="display-label">Project_name</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Project_name)
+    </div>
+
+    <div class="display-label">Project_comment</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Project_comment)
+    </div>
+
+    <div class="display-label">Project_open</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Project_open)
+    </div>
+</fieldset>
+@using (Html.BeginForm()) {
+    <p>
+        <input type="submit" value="Delete" /> |
+        @Html.ActionLink("Back to List", "Index")
+    </p>
+}

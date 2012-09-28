@@ -1,0 +1,39 @@
+﻿@model RiseWork.Models.LogOnModel
+@{
+	ViewBag.Title = "Вход";
+}
+<h2>
+	Вход</h2>
+<script src="@Url.Content("~/Scripts/jquery.validate.min.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.min.js")" type="text/javascript"></script>
+
+@Html.ValidationSummary(true, "Произошла печаль:")
+<br />
+@using (Html.BeginForm(null, null, FormMethod.Post, new { @class = "form-horizontal" }))
+{
+	<div>
+		<fieldset>
+			<div class="control-group">
+				<label class="control-label" for="input01">
+					Логин</label>
+				<div class="controls">
+					@Html.TextBoxFor(m => m.UserName)
+					@Html.ValidationMessageFor(m => m.UserName)
+				</div>
+			</div>
+			<div class="control-group">
+				<label class="control-label" for="input01">
+					Пароль</label>
+				<div class="controls">
+					@Html.PasswordFor(m => m.Password)
+					@Html.ValidationMessageFor(m => m.Password)
+				</div>
+			</div>
+			<div class="form-actions">
+				<button type="submit" class="btn btn-primary">
+					Войти</button>&nbsp;&nbsp;
+				@Html.ActionLink("Отмена", "Index", "Home")
+			</div>
+		</fieldset>
+	</div>
+}
